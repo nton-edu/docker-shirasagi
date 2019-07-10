@@ -1,34 +1,50 @@
-rails:
-  build: .
-  hostname: rails
-  container_name: rails
-  environment:
-    - VIRTUAL_HOST=shirasagi.docker # for dinghy
-    - HTTPS_METHOD=noredirect # for dinghy
-    - SERVER_ENV=development
-    - RAILS_ENV=development
-    - DATABASE_HOST=mongo
-  volumes:
-    - "/data/shirasagi/public:/var/www/shirasagi/public"
-  ports:
-    - "80:80"
-  links:
-    - mongo
-  log_opt:
-      max-size: 32m
-      max-file: "5"
+version: "3"
+service:
+  rails:
+    build: .
+    hostname: rails
+    container_name: rails
+    environment:
+      - VIRTUAL_HOST=shirasagi.docker # for dinghy
+      - HTTPS_METHOD=noredirect # for dinghy
+      - SERVER_ENV=development
+      - RAILS_ENV=development
+      - DATABASE_HOST=mongo
+    volumes:
+      - "/data/shirasagi/public:/var/www/shirasagi/public"
+    ports:
+      - "80:80"
+    links:
+      - mongo
+    log_opt:
+        max-size: 32m
+        max-file: "5"
 
-mongo:
-  image: mongo:3.3.12
-  hostname: mongo
-  container_name: mongo
-  ports:
-    - "27018:27017"
-  volumes:
-    - "/data/shirasagi/mongo:/data/db"
-  environment:
-    VIRTUAL_HOST: mongo.shirasagi.docker # for dinghy
-    HTTPS_METHOD: noredirect # for dinghy
-  log_opt:
+  mongo:
+    image: mongo:3.3.12
+    hostname: mongo
+    container_name: mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - "/data/shirasagi/mongo:/data/db"
+    environment:
+      VIRTUAL_HOST: mongo.shirasagi.docker # for dinghy
+      HTTPS_METHOD: noredirect # for dinghy
+    log_opt:
+        max-size: 32m
+        max-file: "5"
+
+  mail:
+    iamge: shirasagi/mail
+    hostname: mail
+    container_name: mail
+    ports:
+      - "587:587"
+      - "143:143"
+    volumes:
+      - "/etc/devocot/conf.d/:/data/mail/dovecot"
+      - "/etc/postfix/vmailbox/:/data/mail/postfix/vmailbox"
+    log_opt:
       max-size: 32m
       max-file: "5"
