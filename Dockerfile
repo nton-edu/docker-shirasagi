@@ -1,4 +1,4 @@
-FROM centos:7.2.1511
+FROM centos:centos7
 
 RUN yum -y update
 RUN yum -y groupinstall "Development Tools"
@@ -7,7 +7,7 @@ RUN yum -y install ImageMagick ImageMagick-devel sudo wget git-core zlib zlib-de
 # Install RVM, Ruby 2.3.1
 RUN yum -y install curl git which tar
 RUN sed -i '0,/enabled=.*/{s/enabled=.*/enabled=1/}' /etc/yum.repos.d/CentOS-Base.repo
-RUN wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm && rpm -ivh epel-release-7-8.noarch.rpm
+RUN yum -y install epel-release.noarch
 RUN yum update -y
 RUN yum -y install nginx
 
